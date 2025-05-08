@@ -1,10 +1,12 @@
-import "@/styles/globals.css";
-import Layout from "@/components/Layout";
+import { ThemeProvider } from "@/context/ThemeContext";
+import "../styles/globals.css";
 
-export default function App({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   return (
-    <Layout>
+    <ThemeProvider>
       <Component {...pageProps} />
-    </Layout>
+    </ThemeProvider>
   );
 }
+
+export default MyApp;
