@@ -21,10 +21,10 @@ export default function Home(props) {
     <div className={`${geistSans.variable} ${geistMono.variable}`}>
       <section className="mb-12">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4 dark:text-white">
             Welcome to MovieHouse
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto dark:text-white">
             Discover the best movies from around the world, all in one place.
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function Home(props) {
 
       <section>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-gray-800">Trending Now</h2>
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Trending Now</h2>
           <Link
             href="/movies"
             className="text-red-600 hover:text-red-700 font-medium"

@@ -1,4 +1,4 @@
-import { getMovieDetails } from "@/utils/movieUtils";
+import { getDirectorDetails } from "@/utils/movieUtils"; // or directorUtils
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -6,8 +6,9 @@ import Link from "next/link";
 export default function DirectorsPage() {
   const router = useRouter();
   const { id } = router.query;
-  const fetcher = () => getMovieDetails(id);
-  const { data, error, isLoading } = useSWR("directorDetails", fetcher);
+
+  const fetcher = () => getDirectorDetails(id);
+  const { data, error, isLoading } = useSWR(`director-${id}`, fetcher);
 
   if (isLoading) {
     return (
@@ -17,7 +18,7 @@ export default function DirectorsPage() {
     );
   }
 
-  if (error) {
+  if (error || !data) {
     return (
       <div className="bg-white rounded-lg shadow-lg p-6 text-center">
         <p className="text-red-600 text-lg mb-4">
@@ -28,22 +29,6 @@ export default function DirectorsPage() {
           className="text-red-600 hover:text-red-700 font-medium"
         >
           Back to Movies
-        </Link>
-      </div>
-    );
-  }
-
-  if (!data || !data.movieDirector) {
-    return (
-      <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-        <p className="text-gray-600 text-lg mb-4">
-          Director information not available
-        </p>
-        <Link
-          href={`/movies/${id}`}
-          className="text-red-600 hover:text-red-700 font-medium"
-        >
-          Back to Movie
         </Link>
       </div>
     );
@@ -66,7 +51,7 @@ export default function DirectorsPage() {
               <span className="text-2xl">👤</span>
             </div>
             <h2 className="text-2xl font-semibold text-gray-800">
-              {data.movieDirector.name}
+              {data.name}
             </h2>
           </div>
 
@@ -74,35 +59,36 @@ export default function DirectorsPage() {
             <h3 className="text-lg font-medium text-gray-800 mb-2">
               Biography
             </h3>
-            <p className="text-gray-600">{data.movieDirector.biography}</p>
+            <p className="text-gray-600">{data.biography}</p>
           </div>
         </div>
 
         <div className="border-t border-gray-200 pt-6">
           <h3 className="text-lg font-medium text-gray-800 mb-4">Directed</h3>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <div className="flex items-center">
+          {data.movies.map((movie) => (
+            <div
+              key={movie.id}
+              className="bg-gray-50 p-4 rounded-lg mb-4 flex items-center"
+            >
               <div className="bg-gray-200 h-12 w-12 flex items-center justify-center mr-4 rounded">
                 <span className="text-xl">🎬</span>
               </div>
               <div>
-                <h4 className="font-medium text-gray-800">
-                  {data.movie.title}
-                </h4>
+                <h4 className="font-medium text-gray-800">{movie.title}</h4>
                 <p className="text-gray-600 text-sm">
-                  {data.movie.releaseYear} • {data.movie.rating} ★
+                  {movie.releaseYear} • {movie.rating} ★ • {movie.genre}
                 </p>
               </div>
             </div>
-          </div>
+          ))}
         </div>
 
         <div className="mt-8">
           <Link
-            href={`/movies/${id}`}
+            href="/movies"
             className="text-red-600 hover:text-red-700 font-medium"
           >
-            ← Back to Movie
+            ← Back to Movies
           </Link>
         </div>
       </div>

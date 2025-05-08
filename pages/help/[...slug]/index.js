@@ -10,7 +10,7 @@ export default function HelpSlugPage() {
   const contentMap = {
     faqs: (
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">
+        <h2 className="text-xl font-bold text-gray-800 mb-4 ">
           Frequently Asked Questions
         </h2>
 
@@ -110,7 +110,7 @@ export default function HelpSlugPage() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4 dark:text-white">
           Help - {section.charAt(0).toUpperCase() + section.slice(1)}
         </h1>
         <div className="flex space-x-2 text-sm">
@@ -118,7 +118,7 @@ export default function HelpSlugPage() {
             Help Center
           </Link>
           <span className="text-gray-400">›</span>
-          <span className="text-gray-600">
+          <span className="text-gray-600 dark:text-white">
             {section.charAt(0).toUpperCase() + section.slice(1)}
           </span>
         </div>

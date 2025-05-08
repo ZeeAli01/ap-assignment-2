@@ -2,7 +2,21 @@ import data from "../movies.json";
 
 // all movies
 export const getAllMovies = async () => {
-  return data.movies;
+  const res = await fetch("http://localhost:3000/api/movies");
+  if (!res.ok) {
+    throw new Error('Failed to fetch movies');
+  }
+  const json = await res.json();
+  return json.data.map(movie => ({
+    id: movie.id,
+    title: movie.title,
+    description: movie.description,
+    releaseYear: movie.release_year,
+    genreId: movie.genre_id,
+    rating: movie.rating,
+    directors: movie.directors,
+    genres: movie.genres
+  }));
 };
 
 // trending movies
@@ -13,18 +27,32 @@ export const getTrendingMovies = async () => {
 
 // movie detail by id
 export const getMovieDetails = async (id) => {
-  const movies = await getAllMovies();
-  const movie = movies.find((movie) => movie.id === id);
-  if (movie) {
-    const movieGenre = await getMovieGenreById(movie.genreId);
-    const movieDirector = await getMovieDirectorById(movie.directorId);
-    return {
-      movie,
-      movieGenre,
-      movieDirector,
-    };
+
+  const res = await fetch(`http://localhost:3000/api/movies/${id}`);
+  if (!res.ok) {
+    return undefined;
   }
-  return undefined;
+  const json = await res.json();
+  const movie = json.data;
+  return {
+    movie: {
+      id: movie.id,
+      title: movie.title,
+      description: movie.description,
+      releaseYear: movie.release_year,
+      genreId: movie.genre_id,
+      rating: movie.rating,
+    },
+    movieGenre: {
+      id: movie.genres.id,
+      name: movie.genres.name,
+    },
+    movieDirector: {
+      id: movie.directors.id,
+      name: movie.directors.name,
+      biography: movie.directors.biography,
+    },
+  };
 };
 
 // movie director by id
@@ -42,8 +70,17 @@ export const getAllDirectors = async () => {
 };
 //all genres:
 export const getAllGenres = async () => {
-  return data.genres;
+  const res = await fetch("http://localhost:3000/api/genres");
+  if (!res.ok) {
+    throw new Error('Failed to fetch genres');
+  }
+  const json = await res.json();
+  return json.data.map(genre => ({
+    id: genre.id,
+    name: genre.name
+  }));
 };
+
 //movie list by genre id:
 export const getMoviesByGenre = async (genreId) => {
   const movies = await getAllMovies();
@@ -53,4 +90,29 @@ export const getMoviesByGenre = async (genreId) => {
 export const getGenreById = async (id) => {
   const genres = await getAllGenres();
   return genres.find((genre) => genre.id === id) || null;
+};
+
+export const getDirectorDetails = async (id) => {
+
+
+  const res = await fetch(`http://localhost:3000/api/directors/${id}`);
+  if (!res.ok) {
+    return undefined;
+  }
+
+  const json = await res.json();
+  const director = json.data;
+
+  return {
+    id: director.id,
+    name: director.name,
+    biography: director.biography,
+    movies: director.movies.map((movie) => ({
+      id: movie.id,
+      title: movie.title,
+      releaseYear: movie.release_year,
+      rating: movie.rating,
+      genre: movie.genres.name,
+    })),
+  };
 };

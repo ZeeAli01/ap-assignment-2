@@ -18,12 +18,12 @@ export default function GenreMoviesPage({ genre, movies }) {
 
   return (
     <div>
-      <div className="mb-8">
-        <div className="flex items-center mb-2">
-          <h1 className="text-3xl font-bold text-gray-800 mr-3">
+      <div className="mb-8 ">
+        <div className="flex items-center mb-2 ">
+          <h1 className="text-3xl font-bold text-gray-800 mr-3 dark:text-white">
             {genre.name}
           </h1>
-          <div className="text-3xl">
+          <div className="text-3xl ">
             {genre.name === "Science Fiction"
               ? "🚀"
               : genre.name === "Adventure"
@@ -35,7 +35,7 @@ export default function GenreMoviesPage({ genre, movies }) {
               : "🎬"}
           </div>
         </div>
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-white">
           Browse all {genre.name} movies in our collection
         </p>
       </div>
@@ -86,13 +86,36 @@ export default function GenreMoviesPage({ genre, movies }) {
 export async function getServerSideProps(context) {
   const { id } = context.params;
 
-  const genre = await getGenreById(id);
-  const movies = await getMoviesByGenre(id);
+  try {
+    const res = await fetch(`http://localhost:3000/api/genres/${id}/movies`);
+    const json = await res.json();
 
-  return {
-    props: {
-      genre,
-      movies,
-    },
-  };
+    if (!json.success) {
+      return {
+        props: {
+          genre: null,
+          movies: [],
+        },
+      };
+    }
+
+    return {
+      props: {
+        genre: json.data.genre,
+        movies: json.data.movies.map((m) => ({
+          id: m.id,
+          title: m.title,
+          rating: m.rating,
+          releaseYear: m.release_year, 
+        })),
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        genre: null,
+        movies: [],
+      },
+    };
+  }
 }

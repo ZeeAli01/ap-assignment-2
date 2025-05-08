@@ -48,7 +48,7 @@ export default function MovieDetails(props) {
         <div className="flex items-center mb-6">
           <div className="flex items-center mr-6">
             <span className="text-yellow-500 mr-1">★</span>
-            <span className="font-medium">{movie.rating}</span>
+            <span className="text-[orange]">{movie.rating}</span>
           </div>
           <div className="text-gray-600">{movie.releaseYear}</div>
         </div>
@@ -75,7 +75,7 @@ export default function MovieDetails(props) {
                   {movieDirector.biography}
                 </p>
                 <Link
-                  href={`/movies/${movie.id}/director`}
+                  href={`/movies/${movieDirector.id}/director`}
                   className="inline-block mt-2 text-red-600 hover:text-red-700 text-sm font-medium"
                 >
                   View Director Details

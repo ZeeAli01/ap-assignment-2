@@ -4,8 +4,8 @@ export default function HelpHome() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Help Center</h1>
-        <p className="text-gray-600">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2 dark:text-white">Help Center</h1>
+        <p className="text-gray-600 dark:text-white">
           Find answers to your questions about MovieHouse
         </p>
       </div>

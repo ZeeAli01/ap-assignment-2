@@ -21,14 +21,14 @@ export default function AllMovies({ movies, genres }) {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">All Movies</h1>
-        <p className="text-gray-600">Browse our collection of amazing films</p>
+        <h1 className="text-3xl font-bold text-gray-800 mb-2 dark:text-white">All Movies</h1>
+        <p className="text-gray-600 dark:text-white">Browse our collection of amazing films</p>
       </div>
 
       <div className="mb-8 p-4 bg-white rounded-lg shadow">
         <label
           htmlFor="genre-select"
-          className="block text-sm font-medium text-gray-700 mb-2"
+          className="block text-sm font-medium text-gray-700 mb-2 dark:text-black"
         >
           Filter by Genre:
         </label>
@@ -36,7 +36,7 @@ export default function AllMovies({ movies, genres }) {
           id="genre-select"
           value={selectedGenre}
           onChange={handleGenreChange}
-          className="w-full md:w-64 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          className="w-full md:w-64 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:text-black"
         >
           <option value="">All Genres</option>
           {genres.map((genre) => (
@@ -83,15 +83,19 @@ export default function AllMovies({ movies, genres }) {
 }
 
 export async function getStaticProps() {
-  const movies = await getAllMovies();
-  const genres = await getAllGenres();
-
-  return {
-    props: {
-      movies,
-      genres,
-    },
-    notFound: movies ? false : true,
-    revalidate: 3600,
-  };
+  try {
+    const movies = await getAllMovies();
+    const genres = await getAllGenres();
+  
+    return {
+      props: {
+        movies,
+        genres,
+      },
+      notFound: !movies ,
+      revalidate: 3600,
+    };
+  }  catch (error) {
+    return { props: { movies: [], genres: [] } };
+  }
 }
